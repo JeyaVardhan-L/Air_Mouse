@@ -1,0 +1,16 @@
+item,qty,spec,purpose
+ESP32 DevKit,1,"classic WROOM-32, 30 or 38 pin",microcontroller and Bluetooth radio
+MPU6050,1,GY-521 breakout,gyro and accelerometer
+Li-Po cell,1,"3.7 V single cell, 500-1000 mAh",power
+TP4056 charger,1,"USB-C, with protection (OUT+/OUT- pads)",charging and battery protection
+MT3608 boost,1,adjustable step-up module,battery voltage to 5.0 V
+Slide switch,1,small SPDT,hard power off
+Tactile button,3,"6 x 6 mm, low profile","left, middle and right click"
+Tactile button with cap,1,12 x 12 mm,palm (enable) button
+Resistor,2,220 kOhm,battery voltage divider
+Capacitor,1,100 nF ceramic,steadies the battery reading
+Capacitor,1,470 uF electrolytic,optional; across VIN and GND if the board resets
+Silicone wire,2 m,"30 AWG, stranded",all wiring; flexible enough for the fingers
+Fingerless glove,1,thin and snug,chassis
+Perfboard,1,"7 x 7 cm, cut to fit",rigid plate for the ESP32 and sensor
+Heat shrink / Kapton tape / velcro / flexible glue,-,-,insulation and strain relief
