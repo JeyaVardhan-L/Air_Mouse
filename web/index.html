@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>airmouse — a mouse you wear</title>
-  <meta name="description" content="An open-source glove that works as a Bluetooth mouse. ESP32 + MPU6050. Interactive 3D build guide: parts, wiring, firmware.">
-  <meta property="og:title" content="airmouse — a mouse you wear">
-  <meta property="og:description" content="Open-source Bluetooth air mouse glove. Interactive 3D build guide.">
+  <title>Air Mouse — a mouse you wear</title>
+  <meta name="description" content="An open-source wearable Bluetooth mouse. ESP32 + MPU6050. Interactive 3D build guide: parts, wiring, firmware.">
+  <meta property="og:title" content="Air Mouse — a mouse you wear">
+  <meta property="og:description" content="Open-source wearable Bluetooth mouse. Interactive 3D build guide.">
+  <meta name="theme-color" content="#e8e6e0">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 
   <script type="importmap">
@@ -26,281 +27,250 @@
 </head>
 <body>
 
-<!-- sticker and doodle shapes, reused below -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <symbol id="s-bolt" viewBox="0 0 56 68"><path d="M32 4 10 38h15l-6 26 27-38H30z" fill="#3b82f6" stroke="#171717" stroke-width="2.5" stroke-linejoin="round"/></symbol>
-    <symbol id="s-heart" viewBox="0 0 64 60"><path d="M32 54C8 38 4 24 10 14c6-9 18-8 22 2 4-10 16-11 22-2 6 10 2 24-22 40z" fill="#ff6f1e" stroke="#171717" stroke-width="2.5" stroke-linejoin="round"/><circle cx="25" cy="26" r="3" fill="#171717"/><circle cx="39" cy="26" r="3" fill="#171717"/><path d="M27 35q5 5 10 0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linecap="round"/></symbol>
-    <symbol id="s-spark" viewBox="0 0 64 64"><path d="M32 4c2 18 10 26 28 28-18 2-26 10-28 28-2-18-10-26-28-28 18-2 26-10 28-28z" fill="#ff66cf" stroke="#171717" stroke-width="2.5" stroke-linejoin="round"/></symbol>
-    <symbol id="s-ghost" viewBox="0 0 64 68"><path d="M12 60V30a20 20 0 0 1 40 0v30l-7-7-6 7-7-7-7 7-6-7z" fill="#fdfbf9" stroke="#171717" stroke-width="2.5" stroke-linejoin="round"/><circle cx="25" cy="30" r="3.5" fill="#171717"/><circle cx="39" cy="30" r="3.5" fill="#171717"/></symbol>
-    <symbol id="s-star" viewBox="0 0 64 64"><path d="m32 5 8 17 19 2-14 13 4 19-17-9-17 9 4-19L5 24l19-2z" fill="#22c55e" stroke="#171717" stroke-width="2.5" stroke-linejoin="round"/></symbol>
-    <symbol id="d-arrow" viewBox="0 0 90 60"><path d="M4 10c28-10 62 4 74 38" fill="none" stroke="#171717" stroke-width="1.5" stroke-linecap="round"/><path d="M66 42l12 7 3-13" fill="none" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  </defs>
-</svg>
-
 <header class="top">
-  <a class="mark" href="#top" aria-label="airmouse, back to top">
-    <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><path d="M7 3v23l6-5 4 9 4-2-4-9h8z" fill="#fdfbf9" stroke="#171717" stroke-width="2" stroke-linejoin="round"/></svg>
-  </a>
-  <a class="pill" data-repo="" href="https://github.com/JeyaVardhan-L/Air_Mouse">github</a>
+  <a class="brand" href="#top" aria-label="Air Mouse, back to top"><i class="sq"></i><span>Air Mouse<span class="long"> / open hardware</span></span></a>
+  <nav id="nav" aria-label="sections">
+    <a href="#how">How</a>
+    <a href="#explore">Parts in 3D</a>
+    <a href="#parts">Shopping list</a>
+    <a href="#wire">Wiring</a>
+    <a href="#build">Build</a>
+    <a href="#firmware">Firmware</a>
+    <a data-repo="" href="https://github.com/JeyaVardhan-L/Air_Mouse">GitHub ↗</a>
+  </nav>
+  <button class="btn menu" type="button" aria-expanded="false" aria-controls="nav"><span>Menu</span><i>/</i></button>
 </header>
 
-<main id="top">
+<main>
 
   <!-- ============================================================ hero -->
-  <section class="hero wrap">
-    <div class="hero-copy">
-      <p class="caption tilt">dear makers,</p>
-      <h1>meet airmouse</h1>
-      <p class="lede">A mouse you wear. Curl two fingers, point at the screen, and the cursor goes where your hand goes. Let go, and it stays put while you type — <span class="marker">really!</span></p>
-      <div class="cta">
-        <a class="pill" href="#parts">build one</a>
-        <p class="fine">Open source. An ESP32, an MPU6050 and a weekend.</p>
+  <section class="hero bone" id="top">
+    <div class="wrap">
+      <h1 class="split display"><span>Air</span><span>Mouse</span></h1>
+      <div class="hero-meta">
+        <div>
+          <p class="m lg">A wearable Bluetooth mouse / ESP32 + MPU6050 / Open source</p>
+          <p class="lede">Curl two fingers, point at the screen, and the cursor goes where your hand goes. Let go and it stays put while you type.</p>
+        </div>
+        <div class="actions">
+          <a class="btn" href="#parts"><span>Build one</span><i>/</i></a>
+          <a class="btn" data-repo="" href="https://github.com/JeyaVardhan-L/Air_Mouse"><span>Source</span><i>/</i></a>
+        </div>
       </div>
     </div>
-    <div class="hero-art">
-      <div class="stage hero-stage">
-        <canvas id="hero-canvas" aria-label="3D model of the air mouse glove, slowly turning"></canvas>
-        <p class="fallback">the 3D model needs WebGL, which this browser has switched off.</p>
-      </div>
-      <svg class="sticker st-1" aria-hidden="true"><use href="#s-bolt"/></svg>
-      <svg class="sticker st-2" aria-hidden="true"><use href="#s-heart"/></svg>
-      <svg class="sticker st-3" aria-hidden="true"><use href="#s-spark"/></svg>
-      <p class="caption note-fist">curl to point</p>
-      <svg class="doodle arrow-fist" aria-hidden="true"><use href="#d-arrow"/></svg>
+    <div class="stage hero-stage">
+      <canvas id="hero-canvas" aria-label="3D model of the air mouse electronics, slowly turning and breathing apart"></canvas>
+      <div class="tags" id="hero-tags"></div>
+      <p class="fig m">Fig. 01 — The device, taken apart. Drag to turn it.</p>
+      <p class="fallback">The 3D model needs WebGL, which this browser has switched off.</p>
     </div>
   </section>
 
-  <!-- ============================================================ how you use it -->
-  <section class="wrap" id="how">
-    <p class="caption">no desk needed</p>
-    <h2>everything a mouse does, in the air</h2>
-    <div class="moves">
-      <article class="card"><h3>point</h3><p>Hold the palm button with your middle and ring fingers. The cursor follows your hand.</p></article>
-      <article class="card"><h3>click</h3><p>Three buttons on the side of your index finger, pressed by your thumb: left, middle, right.</p></article>
-      <article class="card"><h3>drag</h3><p>Hold the palm button and left click together, then move.</p></article>
-      <article class="card"><h3>scroll</h3><p>Hold the middle button and tilt your hand up or down. A quick tap is a middle click.</p></article>
-      <article class="card"><h3>type</h3><p>Let go of the palm button. Nothing moves, however much your hands do.</p></article>
-    </div>
+  <!-- ============================================================ how -->
+  <section class="band bone" id="how">
+    <p class="side">Fig. 02 — How it behaves</p>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="m">01 / How it works</span>
+        <h2 class="h-lg indigo-text">Everything a mouse does, in the air.</h2>
+      </div>
 
-    <h3 class="sub">from wrist to cursor</h3>
-    <ol class="pipeline">
-      <li><b>gyro</b><span>how fast the hand turns, 500 times a second</span></li>
-      <li><b>zero it</b><span>learn the sensor's drift whenever the hand rests</span></li>
-      <li><b>level it</b><span>use gravity so a rolled wrist still moves straight</span></li>
-      <li><b>shape it</b><span>slow is precise, fast crosses the screen</span></li>
-      <li><b>send it</b><span>a bluetooth mouse report every 8 ms</span></li>
-    </ol>
-    <p class="fine">It measures how fast your hand turns, not where it points, so the cursor never jumps when you press the palm button — it carries on from where it was.</p>
+      <div class="acc">
+        <details name="moves" open><summary>Point</summary><div class="body"><p>Hold the palm button by curling your middle and ring fingers. The cursor follows your hand: turn left and right, nod up and down.</p></div></details>
+        <details name="moves"><summary>Click</summary><div class="body"><p>Three buttons on the side of the index finger, under your thumb. Left at the tip, then middle, then right.</p></div></details>
+        <details name="moves"><summary>Drag</summary><div class="body"><p>Hold the palm button and left click together, then move your hand. Release the click to drop.</p></div></details>
+        <details name="moves"><summary>Scroll</summary><div class="body"><p>Hold the middle button and tilt your hand up or down. A quick tap is a middle click.</p></div></details>
+        <details name="moves"><summary>Type</summary><div class="body"><p>Let go of the palm button. Nothing moves, however much your hands do while you type.</p></div></details>
+        <details name="moves"><summary>Wear it</summary><div class="body"><p>A plate on the back of the hand, two small control pieces on the index finger and the palm. A glove, a velcro strap or a splint all work. The firmware does not care.</p><a href="#parts">[ See the parts → ]</a></div></details>
+      </div>
+
+      <ol class="pipeline">
+        <li><span class="m">01</span><b>Gyro</b><span>How fast the hand turns, 500 times a second.</span></li>
+        <li><span class="m">02</span><b>Zero</b><span>Learns the sensor drift whenever the hand rests.</span></li>
+        <li><span class="m">03</span><b>Level</b><span>Uses gravity so a rolled wrist still moves straight.</span></li>
+        <li><span class="m">04</span><b>Shape</b><span>Slow is precise, fast crosses the screen.</span></li>
+        <li><span class="m">05</span><b>Send</b><span>A Bluetooth mouse report every 8 ms.</span></li>
+      </ol>
+      <p class="note" style="margin-top:20px">It measures how fast your hand turns, not where it points, so the cursor never jumps when you press the palm button. It carries on from where it was.</p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 1000 250" role="img" aria-labelledby="sys-t">
+          <title id="sys-t">Block diagram: the sensor and buttons feed the ESP32 firmware, which sends Bluetooth HID reports to the computer</title>
+          <rect x="0" y="10" width="170" height="60"/><text x="85" y="36" text-anchor="middle">MPU6050</text><text class="dim" x="85" y="54" text-anchor="middle">gyro + accel</text>
+          <rect x="0" y="95" width="170" height="60"/><text x="85" y="121" text-anchor="middle">Palm button</text><text class="dim" x="85" y="139" text-anchor="middle">gates movement</text>
+          <rect x="0" y="180" width="170" height="60"/><text x="85" y="206" text-anchor="middle">L / M / R buttons</text><text class="dim" x="85" y="224" text-anchor="middle">index finger</text>
+          <path d="M170 40H240M234 36l6 4-6 4"/><path d="M170 125H240M234 121l6 4-6 4"/><path d="M170 210H240M234 206l6 4-6 4"/>
+          <rect x="240" y="0" width="400" height="250"/><text class="dim" x="258" y="22">ESP32 firmware</text>
+          <rect x="270" y="40" width="340" height="50"/><text x="440" y="70" text-anchor="middle">500 Hz sample loop</text>
+          <rect x="270" y="108" width="340" height="50"/><text x="440" y="138" text-anchor="middle">Zero · level · shape · gate</text>
+          <rect x="270" y="176" width="340" height="50"/><text x="440" y="206" text-anchor="middle">125 Hz HID report</text>
+          <path d="M440 90v18M436 102l4 6 4-6"/><path d="M440 158v18M436 170l4 6 4-6"/>
+          <path d="M640 125H700M694 121l6 4-6 4"/>
+          <rect x="700" y="95" width="140" height="60"/><text x="770" y="121" text-anchor="middle">BLE HID</text><text class="dim" x="770" y="139" text-anchor="middle">mouse profile</text>
+          <path d="M840 125H880M874 121l6 4-6 4"/>
+          <rect x="880" y="95" width="120" height="60"/><text x="940" y="130" text-anchor="middle">Computer</text>
+        </svg>
+        <figcaption class="m">Fig. 03 — Signal flow, left to right.</figcaption>
+      </figure>
+    </div>
   </section>
 
   <!-- ============================================================ explorer -->
-  <section class="wrap" id="explore">
-    <p class="caption">drag it around</p>
-    <h2>what goes where</h2>
-    <div class="explorer">
-      <div class="stage explore-stage">
-        <canvas id="explore-canvas" aria-label="Interactive 3D model of the glove. Drag to rotate, click a part to learn about it."></canvas>
-        <p class="fallback">the 3D model needs WebGL, which this browser has switched off. the part list on the right still works.</p>
+  <section class="band indigo" id="explore">
+    <p class="side">Fig. 04 — Exploded assembly</p>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="m">02 / Parts in 3D</span>
+        <h2 class="split display"><span>Take</span><span>Apart</span></h2>
+        <p class="lede">Drag to turn it, pull the layers apart, tap a label or a part. Every board is drawn at its real proportions.</p>
       </div>
-      <div class="panel">
-        <div class="card part-card">
-          <h3 id="part-name"></h3>
-          <p id="part-text"></p>
+      <div class="explorer">
+        <div class="stage explore-stage">
+          <canvas id="explore-canvas" aria-label="Interactive 3D model of the air mouse parts. Drag to rotate, click a part to learn about it."></canvas>
+          <div class="tags" id="explore-tags"></div>
+          <p class="fallback">The 3D model needs WebGL, which this browser has switched off. The part list on the right still works.</p>
         </div>
-        <div class="chips" id="part-chips"></div>
-        <label class="slider">
-          <span>pull it apart</span>
-          <input type="range" id="explode" min="0" max="100" value="0">
-        </label>
-        <div class="chips">
-          <button class="chip" type="button" id="toggle-press" aria-pressed="false">hold the palm button</button>
-          <button class="chip" type="button" id="toggle-lines" aria-pressed="false">line drawing</button>
+        <div class="panel">
+          <span class="m">Selected</span>
+          <h3 id="part-name"></h3>
+          <span class="m size" id="part-size"></span>
+          <p class="text" id="part-text"></p>
+          <div class="chips" id="part-chips"></div>
+          <label class="slider"><span class="m">Pull apart</span><input type="range" id="explode" min="0" max="100" value="50"></label>
+          <div class="chips">
+            <button class="chip" type="button" id="toggle-press" aria-pressed="false">Hold the palm button</button>
+            <button class="chip" type="button" id="toggle-lines" aria-pressed="false">Line drawing</button>
+          </div>
+          <span class="m status" id="press-status">palm released: pointer stays put</span>
         </div>
       </div>
     </div>
-
-    <!-- line diagram: the glove from above -->
-    <figure class="glove-map">
-      <svg viewBox="0 0 680 600" role="img" aria-labelledby="map-title">
-        <title id="map-title">Line drawing of the back of a right hand showing where each part sits</title>
-        <g fill="#fdfbf9" stroke="#171717" stroke-width="1.5" stroke-linejoin="round">
-          <!-- fingers, thumb, cuff, palm -->
-          <rect x="232" y="118" width="50" height="160" rx="25"/>
-          <rect x="288" y="92" width="52" height="186" rx="26"/>
-          <rect x="346" y="112" width="50" height="166" rx="25"/>
-          <rect x="402" y="158" width="44" height="120" rx="22"/>
-          <rect x="150" y="330" width="56" height="130" rx="28" transform="rotate(-38 178 395)"/>
-          <rect x="246" y="474" width="188" height="76" rx="22"/>
-          <rect x="228" y="250" width="222" height="236" rx="34"/>
-          <!-- plate and modules -->
-          <rect x="246" y="272" width="186" height="190" rx="6" stroke-dasharray="5 5"/>
-          <rect x="356" y="282" width="66" height="170" rx="5" fill="#f7efe9"/>
-          <rect x="366" y="290" width="46" height="50" rx="3"/>
-          <rect x="256" y="282" width="52" height="60" rx="5" fill="#f7efe9"/>
-          <rect x="256" y="354" width="78" height="42" rx="5" fill="#f7efe9"/>
-          <rect x="256" y="408" width="78" height="42" rx="5" fill="#f7efe9"/>
-          <rect x="270" y="486" width="140" height="52" rx="10" fill="#f7efe9"/>
-          <!-- index buttons -->
-          <circle cx="232" cy="176" r="8"/>
-          <circle cx="232" cy="202" r="8"/>
-          <circle cx="232" cy="228" r="8"/>
-        </g>
-        <circle cx="338" cy="300" r="20" fill="none" stroke="#ff6f1e" stroke-width="2" stroke-dasharray="5 5"/>
-        <g fill="none" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M150 150c26-8 50 2 68 22"/><path d="M206 166l13 7 2-14"/>
-          <path d="M120 300c40-16 90-12 130 6"/><path d="M238 296l13 10-15 6"/>
-          <path d="M150 494c44-4 80-26 102-62"/><path d="M237 438l15-7 2 16"/>
-          <path d="M540 236c-50-8-130 10-180 52"/><path d="M362 274l-3 15 15-2"/>
-          <path d="M548 372c-36 10-76 6-120-12"/><path d="M440 356l-13 3 9 11"/>
-          <path d="M548 520c-42 12-90 8-132-6"/><path d="M428 508l-13 6 10 10"/>
-        </g>
-        <g class="map-text">
-          <text x="20" y="140">left · middle · right</text>
-          <text x="20" y="278">motion sensor</text>
-          <text x="20" y="524">charger + boost</text>
-          <text x="470" y="226">palm button,</text>
-          <text x="470" y="254">underneath</text>
-          <text x="556" y="380">esp32</text>
-          <text x="556" y="528">battery</text>
-        </g>
-      </svg>
-      <figcaption class="fine">Back of a right hand, fingers up. The dashed square is the perfboard plate; the dashed circle is the palm button on the other side.</figcaption>
-    </figure>
   </section>
 
   <!-- ============================================================ parts -->
-  <section class="wrap" id="parts">
-    <svg class="sticker st-4" aria-hidden="true"><use href="#s-ghost"/></svg>
-    <p class="caption">raid your drawers first</p>
-    <h2>the shopping list</h2>
-    <p class="body">Tick what you already have. Your ticks stay in this browser. <span class="tag" id="parts-count"></span></p>
-    <div class="parts" id="parts-grid"></div>
-    <p class="fine">Tools: soldering iron, multimeter, breadboard and jumper wires, a small screwdriver for the boost module.</p>
-    <p class="fine">Skip power-bank style charge-and-boost boards (the IP5306 kind). They switch off when the load is light, which will randomly kill the mouse.</p>
+  <section class="band bone" id="parts">
+    <p class="side">Raid your drawers first</p>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="m">03 / Shopping list</span>
+        <h2 class="split display"><span>Parts</span><span>List</span></h2>
+        <p class="lede">Tick what you already have. Your ticks stay in this browser.<span class="m count" id="parts-count"></span></p>
+      </div>
+      <div class="rows" id="parts-grid"></div>
+      <div class="notes">
+        <p class="note">Tools: soldering iron, multimeter, breadboard and jumper wires, a small screwdriver for the boost module.</p>
+        <p class="note">Skip power-bank style charge-and-boost boards (the IP5306 kind). They switch off when the load is light, which will randomly kill the mouse.</p>
+      </div>
+    </div>
   </section>
 
   <!-- ============================================================ wiring -->
-  <section class="wrap" id="wire">
-    <p class="caption">one step at a time</p>
-    <h2>wire it up</h2>
-    <div class="stage wire-stage">
-      <canvas id="wire-canvas" aria-label="Interactive 3D wiring diagram. Drag to tilt, pick a step to highlight its wires."></canvas>
-      <p class="fallback">the 3D wiring view needs WebGL. the steps and the pin table below have everything.</p>
-    </div>
-    <div class="chips" id="wire-tabs" aria-label="wiring steps"></div>
-    <div class="wire-info">
-      <div class="card" id="wire-card">
-        <h3 id="wire-title"></h3>
-        <p id="wire-text"></p>
-        <ul class="legend" id="wire-legend"></ul>
+  <section class="band indigo" id="wire">
+    <p class="side">Fig. 05 — The bench</p>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="m">04 / Wiring</span>
+        <h2 class="split display"><span>Wire</span><span>Up</span></h2>
       </div>
-      <div class="card">
-        <h3>pin map</h3>
-        <table>
-          <thead><tr><th scope="col">what</th><th scope="col">esp32 pin</th><th scope="col">note</th></tr></thead>
-          <tbody id="pin-rows"></tbody>
-        </table>
+      <div class="stage wire-stage">
+        <canvas id="wire-canvas" aria-label="Interactive 3D wiring diagram. Drag to tilt, pick a step to highlight its wires."></canvas>
+        <div class="tags" id="wire-tags"></div>
+        <p class="fallback">The 3D wiring view needs WebGL. The steps and the pin table below have everything.</p>
       </div>
-    </div>
+      <div class="chips" id="wire-tabs" aria-label="wiring steps"></div>
+      <div class="wire-info">
+        <div class="wire-card" id="wire-card">
+          <h3 id="wire-title"></h3>
+          <p id="wire-text"></p>
+          <ul class="legend" id="wire-legend"></ul>
+        </div>
+        <div>
+          <span class="m">Pin map</span>
+          <table style="margin-top:12px">
+            <thead><tr><th scope="col">What</th><th scope="col">ESP32 pin</th><th scope="col">Note</th></tr></thead>
+            <tbody id="pin-rows"></tbody>
+          </table>
+        </div>
+      </div>
 
-    <!-- line diagram: the power chain -->
-    <h3 class="sub">the power chain</h3>
-    <figure class="chain">
-      <svg viewBox="0 0 1000 150" role="img" aria-labelledby="chain-title">
-        <title id="chain-title">Battery, then charger, then switch, then boost set to 5 volts, then the ESP32 VIN pin</title>
-        <g fill="#fdfbf9" stroke="#171717" stroke-width="1.5">
-          <rect x="10" y="40" width="150" height="70" rx="12"/>
-          <rect x="220" y="40" width="150" height="70" rx="12"/>
-          <rect x="430" y="40" width="110" height="70" rx="12"/>
-          <rect x="600" y="40" width="170" height="70" rx="12"/>
-          <rect x="830" y="40" width="160" height="70" rx="12"/>
-        </g>
-        <g fill="none" stroke="#171717" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M164 76c14-5 34-5 50-1"/><path d="M204 67l11 8-11 8"/>
-          <path d="M374 76c14-5 34-5 50-1"/><path d="M414 67l11 8-11 8"/>
-          <path d="M544 76c14-5 34-5 50-1"/><path d="M584 67l11 8-11 8"/>
-          <path d="M774 76c14-5 34-5 50-1"/><path d="M814 67l11 8-11 8"/>
-        </g>
-        <g class="chain-text" text-anchor="middle">
-          <text x="85" y="82">li-po cell</text>
-          <text x="295" y="82">tp4056</text>
-          <text x="485" y="82">switch</text>
-          <text x="685" y="82">mt3608</text>
-          <text x="910" y="82">esp32 VIN</text>
-        </g>
-        <g class="chain-note" text-anchor="middle">
-          <text x="85" y="134">3.0–4.2 V</text>
-          <text x="295" y="134">charges, protects</text>
-          <text x="485" y="134">hard off</text>
-          <text x="685" y="134">set to 5.0 V first</text>
-          <text x="910" y="134">5.0 V in</text>
-        </g>
-      </svg>
-    </figure>
+      <figure class="diagram">
+        <svg viewBox="0 0 1000 120" role="img" aria-labelledby="chain-t">
+          <title id="chain-t">Power chain: battery, charger, switch, boost set to 5 volts, ESP32 VIN pin</title>
+          <rect x="0" y="20" width="150" height="56"/><rect x="212" y="20" width="150" height="56"/><rect x="424" y="20" width="150" height="56"/><rect x="636" y="20" width="150" height="56"/><rect x="848" y="20" width="150" height="56"/>
+          <path d="M150 48H212M206 44l6 4-6 4"/><path d="M362 48H424M418 44l6 4-6 4"/><path d="M574 48H636M630 44l6 4-6 4"/><path d="M786 48H848M842 44l6 4-6 4"/>
+          <text x="75" y="53" text-anchor="middle">Li-po cell</text><text x="287" y="53" text-anchor="middle">TP4056</text><text x="499" y="53" text-anchor="middle">Switch</text><text x="711" y="53" text-anchor="middle">MT3608</text><text x="923" y="53" text-anchor="middle">ESP32 VIN</text>
+          <text class="dim" x="75" y="104" text-anchor="middle">3.0–4.2 V</text><text class="dim" x="287" y="104" text-anchor="middle">charges, protects</text><text class="dim" x="499" y="104" text-anchor="middle">hard off</text><text class="dim" x="711" y="104" text-anchor="middle">set to 5.0 V first</text><text class="dim" x="923" y="104" text-anchor="middle">5.0 V in</text>
+        </svg>
+        <figcaption class="m">Fig. 06 — The power chain.</figcaption>
+      </figure>
 
-    <div class="rules">
-      <p class="caption">three ways to fry it. don't.</p>
-      <ol>
-        <li>Set the MT3608 to 5.0 V with a multimeter <span class="marker">before</span> it touches the ESP32.</li>
-        <li>Never connect the battery straight to the 3V3 pin. A full cell is 4.2 V.</li>
-        <li>Slide the switch off before plugging USB into the ESP32 to flash it.</li>
-      </ol>
-      <p class="fine">Also leave D0, D2, D5, D12 and D15 alone: they decide how the board boots.</p>
+      <div class="rules">
+        <span class="m">Three ways to fry it. Don't.</span>
+        <ol>
+          <li>Set the MT3608 to 5.0 V with a multimeter before it touches the ESP32.</li>
+          <li>Never connect the battery straight to the 3V3 pin. A full cell is 4.2 V.</li>
+          <li>Slide the switch off before plugging USB into the ESP32 to flash it.</li>
+        </ol>
+        <p class="note">Also leave D0, D2, D5, D12 and D15 alone: they decide how the board boots.</p>
+      </div>
     </div>
   </section>
 
   <!-- ============================================================ build -->
-  <section class="wrap" id="build">
-    <svg class="sticker st-5" aria-hidden="true"><use href="#s-star"/></svg>
-    <p class="caption">each one works before the next</p>
-    <h2>build it in eight sittings</h2>
-    <ol class="phases" id="build-list"></ol>
+  <section class="band bone" id="build">
+    <p class="side">Each one works before the next</p>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="m">05 / Build order</span>
+        <h2 class="split display"><span>Build</span><span>Order</span></h2>
+      </div>
+      <ol class="phases" id="build-list"></ol>
+    </div>
   </section>
 
-  <!-- ============================================================ firmware -->
-  <section class="wrap" id="firmware">
-    <p class="caption">four commands</p>
-    <h2>flash the firmware</h2>
-    <div class="fw">
-      <div>
-        <p class="body">Install <a href="https://platformio.org/install/cli">PlatformIO</a>, plug the ESP32 into USB, then:</p>
+  <!-- ============================================================ firmware + footer -->
+  <section class="band indigo" id="firmware">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="m">06 / Firmware</span>
+        <h2 class="split display"><span>Flash</span><span>It</span></h2>
+      </div>
+      <div class="fw">
+        <div>
+          <p>Install <a href="https://platformio.org/install/cli">PlatformIO</a>, plug the ESP32 into USB, then:</p>
 <pre><code>git clone https://github.com/JeyaVardhan-L/Air_Mouse.git
 cd Air_Mouse/firmware
 pio run -t upload
 pio device monitor</code></pre>
-        <p class="body">Open your computer's Bluetooth settings and pair <b>Air Mouse</b>. The on-board LED blinks while it is looking for a host and goes dark once connected.</p>
-        <p class="fine">If the LED blinks fast and never stops, the sensor was not found: check the four MPU6050 wires. If the upload will not start, hold the BOOT button on the board while it connects.</p>
+          <p>Open your computer's Bluetooth settings and pair <b>Air Mouse</b>. The on-board LED blinks while it is looking for a host and goes dark once connected.</p>
+          <p class="note">If the LED blinks fast and never stops, the sensor was not found: check the four MPU6050 wires. If the upload will not start, hold the BOOT button on the board while it connects.</p>
+        </div>
+        <div>
+          <span class="m">Make it yours — firmware/src/config.h</span>
+          <table style="margin-top:12px">
+            <thead><tr><th scope="col">Setting</th><th scope="col">Default</th><th scope="col">What it does</th></tr></thead>
+            <tbody id="tuning-rows"></tbody>
+          </table>
+        </div>
       </div>
-      <div class="card">
-        <h3>make it yours</h3>
-        <p class="fine">Everything lives in <code>firmware/src/config.h</code>.</p>
-        <table>
-          <thead><tr><th scope="col">setting</th><th scope="col">default</th><th scope="col">what it does</th></tr></thead>
-          <tbody id="tuning-rows"></tbody>
-        </table>
-      </div>
-    </div>
 
-    <h3 class="sub">the numbers</h3>
-    <div class="stats">
-      <div class="card stat"><span class="stat-value">10–20 ms</span><span class="stat-label">hand to cursor</span><span class="tag">design target</span></div>
-      <div class="card stat"><span class="stat-value">500 Hz</span><span class="stat-label">sensor loop</span><span class="tag">in firmware</span></div>
-      <div class="card stat"><span class="stat-value">125 Hz</span><span class="stat-label">reports to the computer</span><span class="tag">in firmware</span></div>
-      <div class="card stat"><span class="stat-value">4–5 h</span><span class="stat-label">per 500 mAh</span><span class="tag">estimate</span></div>
+      <h3 class="sub">The numbers</h3>
+      <div class="stats">
+        <div class="stat"><strong>10–20 ms</strong><span class="m">Hand to cursor</span><span class="m">Design target</span></div>
+        <div class="stat"><strong>500 Hz</strong><span class="m">Sensor loop</span><span class="m">In firmware</span></div>
+        <div class="stat"><strong>125 Hz</strong><span class="m">Reports to the computer</span><span class="m">In firmware</span></div>
+        <div class="stat"><strong>4–5 h</strong><span class="m">Per 500 mAh</span><span class="m">Estimate</span></div>
+      </div>
+      <p class="note" style="margin-top:24px">Honest status: the firmware was written ahead of the first finished build. Measured latency, battery life and weight will replace the targets above once it has been built and tested.</p>
+
+      <footer class="foot">
+        <p class="display">Wave.</p>
+        <p class="lede">Air Mouse is open source under the MIT licence. Build one, break one, send a pull request.</p>
+        <p class="foot-links"><a data-repo="" href="https://github.com/JeyaVardhan-L/Air_Mouse">Source</a><a data-repo="/issues" href="https://github.com/JeyaVardhan-L/Air_Mouse/issues">Issues</a><a data-repo="/blob/main/hardware/wiring.md" href="https://github.com/JeyaVardhan-L/Air_Mouse/blob/main/hardware/wiring.md">Wiring as text</a></p>
+      </footer>
     </div>
-    <p class="fine">Honest status: the firmware was written ahead of the first finished glove. Measured latency, battery life and weight will replace the targets above once it has been built and tested.</p>
   </section>
 
 </main>
-
-<footer class="band">
-  <div class="wrap band-inner">
-    <p class="band-big">go on, wave at your computer.</p>
-    <p>airmouse is open source under the MIT licence. Build one, break one, send a pull request.</p>
-    <p class="band-links"><a data-repo="" href="https://github.com/JeyaVardhan-L/Air_Mouse">source</a><a data-repo="/issues" href="https://github.com/JeyaVardhan-L/Air_Mouse/issues">issues</a><a data-repo="/blob/main/hardware/wiring.md" href="https://github.com/JeyaVardhan-L/Air_Mouse/blob/main/hardware/wiring.md">wiring as text</a></p>
-  </div>
-</footer>
-
 </body>
 </html>

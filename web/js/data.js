@@ -27,8 +27,8 @@ export const PARTS = [
     why: 'steady the battery reading; soak up radio bursts.' },
   { id: 'wire', name: 'silicone wire', qty: '2 m', spec: '30 AWG, stranded',
     why: 'finger wires bend all day. stiff wire snaps.' },
-  { id: 'glove', name: 'fingerless glove', qty: '1', spec: 'thin and snug: cycling or gym',
-    why: 'the chassis.' },
+  { id: 'mount', name: 'something to wear it on', qty: '1', spec: 'fingerless glove, or a velcro strap',
+    why: 'the chassis. a thin snug glove is the easiest start.' },
   { id: 'perf', name: 'perfboard', qty: '1', spec: '7 × 7 cm, cut to fit',
     why: 'one rigid plate for the esp32 and the sensor.' },
   { id: 'misc', name: 'bits and bobs', qty: '—', spec: 'heat shrink, kapton tape, velcro, flexible glue',
@@ -36,27 +36,27 @@ export const PARTS = [
 ];
 
 // ------------------------------------------------------------ 3D explorer
-export const GLOVE_PARTS = {
-  esp32:   { name: 'esp32 devkit', text: 'runs the firmware and talks bluetooth. sits on the back of the hand with the usb port facing your wrist.' },
-  mpu:     { name: 'mpu6050', text: 'glued flat to the same plate as the esp32. if it can wobble, the cursor wobbles.' },
-  charger: { name: 'tp4056 charger', text: 'plug usb-c in here to charge. it also cuts the battery off before it runs too low.' },
-  boost:   { name: 'mt3608 boost', text: 'turns 3.0–4.2 V of battery into 5.0 V. set it with a multimeter before connecting anything.' },
-  battery: { name: 'li-po cell', text: 'rides on the cuff, padded, with no solder joints pressing into the pouch.' },
-  power:   { name: 'slide switch', text: 'hard off, between the charger and the boost module.' },
+// Ids match buildAssembly() in models.js.
+export const ASSEMBLY_PARTS = {
+  esp32:   { name: 'esp32 devkit', text: 'runs the firmware and talks bluetooth. it sits on the plate with the usb port at the wrist end and the antenna end clear of everything else.' },
+  mpu6050: { name: 'mpu6050', text: 'fixed flat to the same plate as the esp32. if it can wobble, the cursor wobbles, so glue it down.' },
+  charger: { name: 'tp4056 charger', text: 'plug usb-c in here to charge. it also cuts the battery off before it runs too low or if something shorts.' },
+  boost:   { name: 'mt3608 boost', text: 'turns 3.0 to 4.2 V of battery into a steady 5.0 V. set it with a multimeter before connecting anything.' },
+  battery: { name: 'li-po cell', text: 'the heaviest part. keep it flat and padded, with no solder joints pressing into the pouch.' },
+  power:   { name: 'slide switch', text: 'a hard off, between the charger and the boost module.' },
   index:   { name: 'index buttons', text: 'three buttons on the thumb side of the index finger: left at the tip end, then middle, then right.' },
-  palm:    { name: 'palm button', text: 'under the palm where your middle and ring fingertips land. hold it and the cursor follows your hand.' },
-  plate:   { name: 'perfboard plate', text: 'everything on the back of the hand is fixed to one rigid plate, stitched or velcroed to the glove.' },
-  hand:    { name: 'the glove', text: 'fingerless, so you can still type. thin and snug, so the plate does not slide around.' },
+  palm:    { name: 'palm button', text: 'where your middle and ring fingertips land when you curl them. hold it and the cursor follows your hand.' },
+  plate:   { name: 'perfboard plate', text: 'one rigid plate for the esp32 and the sensor, so they stay square to each other. mount it on the back of the hand.' },
 };
 
 // ------------------------------------------------------------ wiring
 // Pad ids are "<module>.<pad>" and match web/js/wiring.js.
 export const WIRE_COLORS = {
-  power: 0xff6f1e,
-  ground: 0x171717,
-  blue: 0x3b82f6,
-  pink: 0xff66cf,
-  green: 0x22c55e,
+  power: 0xffffff,
+  ground: 0x000000,
+  blue: 0x9aa3ff,
+  pink: 0xd4d7ff,
+  green: 0xa8a69f,
 };
 
 export const WIRING_STEPS = [
@@ -158,8 +158,8 @@ export const BUILD_STEPS = [
     text: 'wiring steps 1 to 4. set the boost to 5.0 V before it ever meets the esp32. then add the gauge, step 8.' },
   { id: 'plate', title: 'build the plate',
     text: 'move the esp32 and the sensor onto perfboard, rigid and square to each other. keep the antenna end clear.' },
-  { id: 'glove', title: 'dress the glove',
-    text: 'stitch or velcro the plate on. run the finger wires with a small loop of slack at each knuckle, and glue both ends of every solder joint.' },
+  { id: 'mount', title: 'put it on your hand',
+    text: 'stitch or velcro the plate onto a glove or strap. run the finger wires with a small loop of slack at each knuckle, and glue both ends of every solder joint.' },
   { id: 'tune', title: 'tune the feel',
     text: 'SENSITIVITY, the gain curve and CLICK_FREEZE_MS in config.h. small changes, one at a time.' },
 ];

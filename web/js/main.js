@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { buildGlove } from './glove.js';
+import { buildAssembly, PART_INFO } from './models.js';
 import { initWiring } from './wiring.js';
-import { makeStage } from './toon.js';
+import { makeStage, makeTags, setLineArt } from './kit.js';
 import {
-  BUILD_STEPS, GLOVE_PARTS, PARTS, PIN_TABLE, REPO_URL, TUNING, WIRE_COLORS, WIRING_STEPS,
+  ASSEMBLY_PARTS, BUILD_STEPS, PARTS, PIN_TABLE, REPO_URL, TUNING, WIRE_COLORS, WIRING_STEPS,
 } from './data.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -48,8 +48,8 @@ function renderParts() {
     input.addEventListener('change', () => { have.toggle(p.id, input.checked); update(); });
     return el('label', { class: 'part' },
       input,
-      el('span', { class: 'part-qty' }, p.qty === '—' ? '' : `× ${p.qty}`),
       el('span', { class: 'part-name' }, p.name),
+      el('span', { class: 'part-qty' }, p.qty === '—' ? '' : `× ${p.qty}`),
       el('span', { class: 'part-spec' }, p.spec),
       el('span', { class: 'part-why' }, p.why),
     );
@@ -67,7 +67,7 @@ function renderBuild() {
     return el('li', {},
       el('label', { class: 'phase' },
         input,
-        el('span', { class: 'phase-num' }, String(i + 1)),
+        el('span', { class: 'phase-num' }, String(i + 1).padStart(2, '0')),
         el('span', { class: 'phase-body' },
           el('span', { class: 'phase-title' }, s.title),
           el('span', { class: 'phase-text' }, s.text)),
@@ -81,44 +81,59 @@ function renderTable(selector, rows) {
 }
 
 // ------------------------------------------------------------ hero model
+const HIDDEN_LABELS = new Set(['plate']);
+
 function initHero() {
   const canvas = $('#hero-canvas');
+  const target = new THREE.Vector3(0, 3.2, 0);
   const stage = makeStage(canvas, {
-    fov: 30,
+    fov: 28,
     onResize(camera, aspect) {
-      const d = 38 * Math.max(1, 1.05 / aspect);
-      camera.position.set(-0.42 * d, 0.62 * d, 0.66 * d - 2.5);
-      camera.lookAt(-0.5, 0, -2.5);
+      const d = 22 * Math.max(1, 2.2 / aspect);
+      camera.position.set(0.62 * d, 0.5 * d, 0.78 * d).add(target);
+      camera.lookAt(target);
     },
   });
-  const glove = buildGlove();
-  stage.scene.add(glove.root);
+  const device = buildAssembly('light');
+  stage.scene.add(device.root);
 
-  let last = 0;
+  const controls = new OrbitControls(stage.camera, canvas);
+  controls.target.copy(target);
+  controls.enableZoom = false;
+  controls.enablePan = false;
+  controls.enableDamping = true;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.9;
+  canvas.style.touchAction = 'pan-y';
+
+  const tags = makeTags($('#hero-tags'), stage.camera, canvas);
+  for (const id of device.ids) {
+    if (HIDDEN_LABELS.has(id)) continue;
+    tags.add({ text: PART_INFO[id].name, anchor: device.parts[id].anchor, side: id === 'palm' || id === 'esp32' || id === 'battery' ? 'l' : 'r', length: id === 'power' ? 90 : 34, id });
+  }
+  stage.attachTags(tags);
+
   stage.run((t) => {
-    glove.root.rotation.y = -0.25 + Math.sin(t * 0.45) * 0.4;
-    glove.root.rotation.z = Math.sin(t * 0.6) * 0.06;
-    glove.root.position.y = Math.sin(t * 0.9) * 0.3;
-    glove.setPress(t % 7 > 4.2);  // every few seconds: curl, hold, let go
-    glove.update(t - last);
-    last = t;
+    controls.update();
+    device.setExplode(0.62 + Math.sin(t * 0.5) * 0.22);
+    device.setPress(t % 6 > 3.8);
   });
 }
 
 // ------------------------------------------------------------ explorer
 function initExplorer() {
   const canvas = $('#explore-canvas');
-  const target = new THREE.Vector3(-0.5, 0.5, -2.2);
+  const target = new THREE.Vector3(0, 3.2, 0);
   const stage = makeStage(canvas, {
-    fov: 30,
+    fov: 28,
     onResize(camera, aspect) {
-      const d = 35 * Math.max(1, 1.15 / aspect);
-      camera.position.set(-0.42 * d, 0.62 * d, 0.66 * d).add(target);
+      const d = 20 * Math.max(1, 2.2 / aspect);
+      camera.position.set(0.62 * d, 0.5 * d, 0.78 * d).add(target);
       camera.lookAt(target);
     },
   });
-  const glove = buildGlove();
-  stage.scene.add(glove.root);
+  const device = buildAssembly('dark');
+  stage.scene.add(device.root);
 
   const controls = new OrbitControls(stage.camera, canvas);
   controls.target.copy(target);
@@ -129,17 +144,25 @@ function initExplorer() {
 
   const title = $('#part-name');
   const text = $('#part-text');
+  const size = $('#part-size');
   const chips = $('#part-chips');
+  const tags = makeTags($('#explore-tags'), stage.camera, canvas);
 
   function select(id) {
-    glove.select(id);
-    title.textContent = GLOVE_PARTS[id].name;
-    text.textContent = GLOVE_PARTS[id].text;
+    device.paint(id);
+    tags.select(id);
+    title.textContent = ASSEMBLY_PARTS[id].name;
+    text.textContent = ASSEMBLY_PARTS[id].text;
+    size.textContent = PART_INFO[id].mm;
     for (const chip of chips.children) chip.setAttribute('aria-pressed', String(chip.dataset.part === id));
   }
 
-  chips.append(...Object.entries(GLOVE_PARTS).map(([id, p]) =>
-    el('button', { class: 'chip', type: 'button', 'data-part': id, 'aria-pressed': 'false', onclick: () => select(id) }, p.name)));
+  for (const id of device.ids) {
+    chips.append(el('button', { class: 'chip', type: 'button', 'data-part': id, 'aria-pressed': 'false', onclick: () => select(id) }, ASSEMBLY_PARTS[id].name));
+    if (id === 'plate') continue;
+    tags.add({ text: PART_INFO[id].name, anchor: device.parts[id].anchor, side: id === 'palm' || id === 'esp32' || id === 'battery' ? 'l' : 'r', length: id === 'power' ? 90 : 34, id, onClick: () => select(id) });
+  }
+  stage.attachTags(tags);
 
   // Click (not drag) on the model picks the part under the pointer.
   const raycaster = new THREE.Raycaster();
@@ -151,11 +174,12 @@ function initExplorer() {
     const rect = canvas.getBoundingClientRect();
     pointer.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
     raycaster.setFromCamera(pointer, stage.camera);
-    const hit = raycaster.intersectObject(glove.root, true)[0];
+    const hit = raycaster.intersectObject(device.root, true)[0];
     if (hit && hit.object.userData.part) select(hit.object.userData.part);
   });
 
-  $('#explode').addEventListener('input', (e) => glove.setExplode(Number(e.target.value) / 100));
+  $('#explode').addEventListener('input', (e) => device.setExplode(Number(e.target.value) / 100));
+  $('#explode').value = '50';
 
   const toggle = (selector, apply) => {
     const button = $(selector);
@@ -165,17 +189,15 @@ function initExplorer() {
       apply(on);
     });
   };
-  toggle('#toggle-press', (on) => glove.setPress(on));
-  toggle('#toggle-lines', (on) => glove.setLineArt(on));
+  const status = $('#press-status');
+  toggle('#toggle-press', (on) => {
+    device.setPress(on);
+    status.textContent = on ? 'palm held: pointer follows your hand' : 'palm released: pointer stays put';
+  });
+  toggle('#toggle-lines', (on) => setLineArt(device.root, on));
 
   select('palm');
-
-  let last = 0;
-  stage.run((t) => {
-    controls.update();
-    glove.update(t - last);
-    last = t;
-  });
+  stage.run(() => controls.update());
 }
 
 // ------------------------------------------------------------ wiring
@@ -196,7 +218,7 @@ function initWiringSection() {
     if (index === null) {
       title.textContent = 'the whole circuit';
       const count = WIRING_STEPS.reduce((n, s) => n + s.wires.length, 0);
-      text.textContent = `${WIRING_STEPS.length} steps, ${count} wires. pick a step to see only its wires, or tap a wire in the model. orange is power, charcoal is ground, colours are signals.`;
+      text.textContent = `${WIRING_STEPS.length} steps, ${count} wires. pick a step to see only its wires, or tap a wire in the model. white is power, black is ground, tints are signals.`;
       card.classList.remove('warn');
     } else {
       const step = WIRING_STEPS[index];
@@ -235,6 +257,16 @@ function guarded(init, canvasSelector) {
   try { init(); } catch (error) { noWebgl($(canvasSelector), error); }
 }
 
+const menu = $('.btn.menu');
+const nav = $('#nav');
+menu.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  menu.setAttribute('aria-expanded', String(open));
+});
+nav.addEventListener('click', (e) => {
+  if (e.target.closest('a')) { nav.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); }
+});
+
 for (const link of document.querySelectorAll('[data-repo]')) {
   link.href = REPO_URL + (link.dataset.repo || '');
 }
@@ -244,8 +276,8 @@ renderBuild();
 renderTable('#pin-rows', PIN_TABLE);
 renderTable('#tuning-rows', TUNING);
 
-// Labels in the 3D scenes are drawn with the page font, so wait for it.
-const fontsReady = document.fonts ? document.fonts.load('600 64px Fraunces').catch(() => {}) : Promise.resolve();
+// Labels in the 3D scenes are page text; wait briefly for the font.
+const fontsReady = document.fonts ? document.fonts.load('400 16px "JetBrains Mono"').catch(() => {}) : Promise.resolve();
 Promise.race([fontsReady, new Promise((r) => setTimeout(r, 1500))]).then(() => {
   guarded(initHero, '#hero-canvas');
   guarded(initExplorer, '#explore-canvas');
