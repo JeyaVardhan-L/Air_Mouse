@@ -1,6 +1,6 @@
 # airmouse
 
-A glove that works as a Bluetooth mouse. Curl two fingers, point at the screen,
+A wearable that works as a Bluetooth mouse. Curl two fingers, point at the screen,
 and the cursor follows your hand. Let go and it stays put, so you can type
 without taking it off.
 
@@ -79,7 +79,7 @@ python -m http.server 8000 --directory web
 
 ## Status
 
-Early. The firmware and guide were written ahead of the first finished glove,
+Early. The firmware and guide were written ahead of the first finished build,
 so the numbers on the site are design targets, not measurements. Measured
 latency, battery life and tuning values will be added once it is built.
 
