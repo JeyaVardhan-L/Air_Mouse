@@ -31,7 +31,7 @@
   <a class="brand" href="#top" aria-label="Air Mouse, back to top"><i class="sq"></i><span>Air Mouse<span class="long"> / open hardware</span></span></a>
   <nav id="nav" aria-label="sections">
     <a href="#how">How</a>
-    <a href="#explore">Parts in 3D</a>
+    <a href="#explore">Anatomy</a>
     <a href="#parts">Shopping list</a>
     <a href="#wire">Wiring</a>
     <a href="#build">Build</a>
@@ -46,7 +46,7 @@
   <!-- ============================================================ hero -->
   <section class="hero bone" id="top">
     <div class="wrap">
-      <h1 class="split display"><span>Air</span><span>Mouse</span></h1>
+      <h1 class="display">Air Mouse</h1>
       <div class="hero-meta">
         <div>
           <p class="m lg">A wearable Bluetooth mouse / ESP32 + MPU6050 / Open source</p>
@@ -120,8 +120,8 @@
     <p class="side">Fig. 04 — Exploded assembly</p>
     <div class="wrap">
       <div class="section-head">
-        <span class="m">02 / Parts in 3D</span>
-        <h2 class="split display"><span>Take</span><span>Apart</span></h2>
+        <span class="m">02 / Anatomy</span>
+        <h2 class="display">Take apart</h2>
         <p class="lede">Drag to turn it, pull the layers apart, tap a label or a part. Every board is drawn at its real proportions.</p>
       </div>
       <div class="explorer">
@@ -137,11 +137,6 @@
           <p class="text" id="part-text"></p>
           <div class="chips" id="part-chips"></div>
           <label class="slider"><span class="m">Pull apart</span><input type="range" id="explode" min="0" max="100" value="50"></label>
-          <div class="chips">
-            <button class="chip" type="button" id="toggle-press" aria-pressed="false">Hold the palm button</button>
-            <button class="chip" type="button" id="toggle-lines" aria-pressed="false">Line drawing</button>
-          </div>
-          <span class="m status" id="press-status">palm released: pointer stays put</span>
         </div>
       </div>
     </div>
@@ -153,8 +148,8 @@
     <div class="wrap">
       <div class="section-head">
         <span class="m">03 / Shopping list</span>
-        <h2 class="split display"><span>Parts</span><span>List</span></h2>
-        <p class="lede">Tick what you already have. Your ticks stay in this browser.<span class="m count" id="parts-count"></span></p>
+        <h2 class="display">Parts list</h2>
+        <p class="lede">Everything you need, and why.</p>
       </div>
       <div class="rows" id="parts-grid"></div>
       <div class="notes">
@@ -170,13 +165,9 @@
     <div class="wrap">
       <div class="section-head">
         <span class="m">04 / Wiring</span>
-        <h2 class="split display"><span>Wire</span><span>Up</span></h2>
+        <h2 class="display">Wire it up</h2>
       </div>
-      <div class="stage wire-stage">
-        <canvas id="wire-canvas" aria-label="Interactive 3D wiring diagram. Drag to tilt, pick a step to highlight its wires."></canvas>
-        <div class="tags" id="wire-tags"></div>
-        <p class="fallback">The 3D wiring view needs WebGL. The steps and the pin table below have everything.</p>
-      </div>
+      <div class="wire-sheet" id="wire-diagram" role="img" aria-label="Wiring diagram. Pick a step to highlight its wires."></div>
       <div class="chips" id="wire-tabs" aria-label="wiring steps"></div>
       <div class="wire-info">
         <div class="wire-card" id="wire-card">
@@ -222,7 +213,7 @@
     <div class="wrap">
       <div class="section-head">
         <span class="m">05 / Build order</span>
-        <h2 class="split display"><span>Build</span><span>Order</span></h2>
+        <h2 class="display">Build order</h2>
       </div>
       <ol class="phases" id="build-list"></ol>
     </div>
@@ -233,7 +224,7 @@
     <div class="wrap">
       <div class="section-head">
         <span class="m">06 / Firmware</span>
-        <h2 class="split display"><span>Flash</span><span>It</span></h2>
+        <h2 class="display">Flash it</h2>
       </div>
       <div class="fw">
         <div>

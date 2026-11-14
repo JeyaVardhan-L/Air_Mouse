@@ -52,11 +52,11 @@ export const ASSEMBLY_PARTS = {
 // ------------------------------------------------------------ wiring
 // Pad ids are "<module>.<pad>" and match web/js/wiring.js.
 export const WIRE_COLORS = {
-  power: 0xffffff,
-  ground: 0x000000,
-  blue: 0x9aa3ff,
-  pink: 0xd4d7ff,
-  green: 0xa8a69f,
+  power: 0xd92d20,
+  ground: 0x111111,
+  blue: 0x2563eb,
+  pink: 0xdb2777,
+  green: 0x16a34a,
 };
 
 export const WIRING_STEPS = [
@@ -116,7 +116,7 @@ export const WIRING_STEPS = [
     title: 'palm button',
     text: 'one leg to D33, the other to the same ground as the finger buttons. D33 is also the pin that wakes the mouse from sleep.',
     wires: [
-      { from: 'palm.S', to: 'esp.D33', color: 'power' },
+      { from: 'palm.S', to: 'esp.D33', color: 'blue' },
       { from: 'palm.G', to: 'idx.G', color: 'ground' },
     ],
   },

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { buildAssembly, PART_INFO } from './models.js';
 import { initWiring } from './wiring.js';
-import { makeStage, makeTags, setLineArt } from './kit.js';
+import { makeStage, makeTags } from './kit.js';
 import {
   ASSEMBLY_PARTS, BUILD_STEPS, PARTS, PIN_TABLE, REPO_URL, TUNING, WIRE_COLORS, WIRING_STEPS,
 } from './data.js';
@@ -20,59 +20,24 @@ function el(tag, attrs = {}, ...children) {
   return node;
 }
 
-// Ticked checklist items, remembered in this browser only.
-function ticks(key) {
-  let set = new Set();
-  try {
-    set = new Set(JSON.parse(localStorage.getItem(key) || '[]'));
-  } catch { /* private window or blocked storage: start empty */ }
-  return {
-    has: (id) => set.has(id),
-    get size() { return set.size; },
-    toggle(id, on) {
-      if (on) set.add(id); else set.delete(id);
-      try { localStorage.setItem(key, JSON.stringify([...set])); } catch { /* not saved */ }
-    },
-  };
-}
-
 // ------------------------------------------------------------ shopping list
 function renderParts() {
-  const have = ticks('airmouse:parts');
-  const count = $('#parts-count');
-  const update = () => { count.textContent = `${have.size} of ${PARTS.length} in hand`; };
-
-  $('#parts-grid').append(...PARTS.map((p) => {
-    const input = el('input', { type: 'checkbox' });
-    input.checked = have.has(p.id);
-    input.addEventListener('change', () => { have.toggle(p.id, input.checked); update(); });
-    return el('label', { class: 'part' },
-      input,
+  $('#parts-grid').append(...PARTS.map((p) =>
+    el('div', { class: 'part' },
       el('span', { class: 'part-name' }, p.name),
       el('span', { class: 'part-qty' }, p.qty === '—' ? '' : `× ${p.qty}`),
       el('span', { class: 'part-spec' }, p.spec),
-      el('span', { class: 'part-why' }, p.why),
-    );
-  }));
-  update();
+      el('span', { class: 'part-why' }, p.why))));
 }
 
 // ------------------------------------------------------------ build phases
 function renderBuild() {
-  const done = ticks('airmouse:build');
-  $('#build-list').append(...BUILD_STEPS.map((s, i) => {
-    const input = el('input', { type: 'checkbox' });
-    input.checked = done.has(s.id);
-    input.addEventListener('change', () => done.toggle(s.id, input.checked));
-    return el('li', {},
-      el('label', { class: 'phase' },
-        input,
-        el('span', { class: 'phase-num' }, String(i + 1).padStart(2, '0')),
-        el('span', { class: 'phase-body' },
-          el('span', { class: 'phase-title' }, s.title),
-          el('span', { class: 'phase-text' }, s.text)),
-      ));
-  }));
+  $('#build-list').append(...BUILD_STEPS.map((s, i) =>
+    el('li', { class: 'phase' },
+      el('span', { class: 'phase-num' }, String(i + 1).padStart(2, '0')),
+      el('span', { class: 'phase-body' },
+        el('span', { class: 'phase-title' }, s.title),
+        el('span', { class: 'phase-text' }, s.text)))));
 }
 
 function renderTable(selector, rows) {
@@ -181,22 +146,7 @@ function initExplorer() {
   $('#explode').addEventListener('input', (e) => device.setExplode(Number(e.target.value) / 100));
   $('#explode').value = '50';
 
-  const toggle = (selector, apply) => {
-    const button = $(selector);
-    button.addEventListener('click', () => {
-      const on = button.getAttribute('aria-pressed') !== 'true';
-      button.setAttribute('aria-pressed', String(on));
-      apply(on);
-    });
-  };
-  const status = $('#press-status');
-  toggle('#toggle-press', (on) => {
-    device.setPress(on);
-    status.textContent = on ? 'palm held: pointer follows your hand' : 'palm released: pointer stays put';
-  });
-  toggle('#toggle-lines', (on) => setLineArt(device.root, on));
-
-  select('palm');
+  select('esp32');
   stage.run(() => controls.update());
 }
 
@@ -239,11 +189,7 @@ function initWiringSection() {
       el('button', { class: 'chip', type: 'button', 'data-step': String(i), title: s.title, onclick: () => show(i) }, String(i + 1))),
   );
 
-  try {
-    scene = initWiring($('#wire-canvas'), { onPick: show });
-  } catch (error) {
-    noWebgl($('#wire-canvas'), error);
-  }
+  scene = initWiring($('#wire-diagram'), { onPick: show });
   show(null);
 }
 

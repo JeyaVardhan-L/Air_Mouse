@@ -2,7 +2,7 @@
 // with edge lines. 1 unit = 10 mm. Each builder returns
 //   { group, pads: { name: Vector3 }, pinMeshes: { name: Mesh } }
 // where pads are the points a wire attaches to, in the group's local space.
-// Read by wiring.js (laid out on a bench) and by buildAssembly() below.
+// Pin lists are shared with wiring.js; buildAssembly() below builds the whole device.
 import * as THREE from 'three';
 import { at, bx, cable, cyl, paint, tagPart, THEMES, trace } from './kit.js';
 
@@ -170,21 +170,6 @@ export function slideSwitch() {
   return m;
 }
 
-// ------------------------------------------------------------ 220k + 220k + 100 nF divider
-export function divider() {
-  const m = fresh();
-  const W = 2.2, D = 0.9, T = 0.12;
-  m.group.add(at(bx(W, T, D, 'pcb'), 0, T / 2, 0));
-  m.group.add(at(cyl(0.09, 0.62, 'metal', 'x'), -0.45, T + 0.1, -0.18));
-  m.group.add(at(cyl(0.09, 0.62, 'metal', 'x'), 0.45, T + 0.1, -0.18));
-  m.group.add(at(cyl(0.14, 0.12, 'metal'), 0.0, T + 0.06, 0.2));
-  solderPad(m, 'IN', -0.9, 0.05, T);
-  solderPad(m, 'MID', 0, -0.18, T);
-  solderPad(m, 'GND', 0.9, 0.05, T);
-  m.size = [W, D];
-  return m;
-}
-
 // ------------------------------------------------------------ palm button
 export function palmButton() {
   const m = fresh();
@@ -247,9 +232,6 @@ export function plate(W = 5.4, D = 5.8) {
   m.size = [W, D];
   return m;
 }
-
-// Builders by id, used by the wiring bench.
-export const BUILDERS = { bat: lipo, tp: tp4056, sw: slideSwitch, mt: mt3608, div: divider, palm: palmButton, idx: indexStrip, esp: esp32, mpu: mpu6050 };
 
 // ------------------------------------------------------------ the whole device
 // Core stack (battery, charger, boost, switch, plate with esp32 + sensor)
