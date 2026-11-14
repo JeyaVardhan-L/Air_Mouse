@@ -1,0 +1,8 @@
+# PlatformIO
+.pio/
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
