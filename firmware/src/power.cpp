@@ -1,6 +1,6 @@
 #include "power.h"
 
-#include <driver/rtc_gpio.h>
+#include <driver/rtc_io.h>
 #include <esp_sleep.h>
 
 #include "config.h"
