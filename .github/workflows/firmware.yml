@@ -29,4 +29,14 @@ jobs:
         run: pip install platformio
 
       - name: Build
-        run: pio run -d firmware
+        run: |
+          set -o pipefail
+          pio run -d firmware 2>&1 | tee build.log
+
+      # Put compiler errors in the run summary so they are readable at a glance.
+      - name: Report compiler errors
+        if: failure()
+        run: |
+          grep -E "(error|Error)[: ]" build.log | head -10 | while IFS= read -r line; do
+            echo "::error::${line}"
+          done
